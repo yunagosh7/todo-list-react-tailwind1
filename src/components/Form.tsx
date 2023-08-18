@@ -1,5 +1,5 @@
 import React, { FormEvent, useRef, useState } from "react";
-import { Task } from "../models/Task";
+import { TaskModel } from "../models/TaskModel";
 
 const Form = () => {
   const inputTaskTitleRef = useRef<HTMLInputElement>(null);
@@ -7,11 +7,6 @@ const Form = () => {
 
   const isTitleCorrect = (): boolean => {
     return inputTaskTitleRef.current?.value.trim() != "";
-    if (inputTaskTitleRef.current?.value.trim() != "") {
-      return true;
-    } else {
-      return false;
-    }
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -24,16 +19,16 @@ const Form = () => {
 
     const title: string = inputTaskTitleRef.current?.value.toString()!!;
     const desc: string = inputTaskDescRef.current?.value.toString() ?? "";
-    const task: Task = new Task(title, desc, false);
+    const task: TaskModel = new TaskModel(title, desc, false);
     console.log(task);
   };
 
   return (
     <form
       onSubmit={(e) => handleSubmit(e)}
-      className="flex flex-col items-center mx-auto w-3/4"
+      className="flex flex-col items-center mx-auto w-3/4 md:w-96"
     >
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col  w-full">
         <label className="text-white text-lg py-2" htmlFor="task-title">
           Task title
         </label>
@@ -58,7 +53,7 @@ const Form = () => {
       </div>
 
       <button
-        className="bg-green-400 w-full py-1 mt-4 rounded-sm text-white text-lg font-bold"
+        className="bg-red-500 w-full py-1 mt-4 rounded-sm text-white text-lg font-bold"
         type="submit"
       >
         Submit

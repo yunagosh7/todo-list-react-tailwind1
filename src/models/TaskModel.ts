@@ -1,4 +1,4 @@
-export class Task {
+export class TaskModel {
     title: string;
     desc: string;
     completed: boolean;
