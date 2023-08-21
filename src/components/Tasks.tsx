@@ -1,19 +1,19 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import { TaskModel } from '../models/TaskModel'
+import Task from './Task';
 
-interface TasksProps{
+
+interface TasksProps {
   tasks: Array<TaskModel>;
-  addTask: (task: TaskModel) => void;
-  removeTask: (task: TaskModel) => void;
-  updateTask: (task: TaskModel) => TaskModel;
-  getTasks: () => Array<TaskModel>;
 }
+const Tasks: FC<TasksProps> = ({tasks: Array<TaskModel>}) => {
 
-const Tasks: FC<TasksProps> = () => {
-  
   return (
     <div>
-      
+      {tasks.map((task: TaskModel) => (
+        <Task task={task}
+        />
+      ))}
     </div>
   )
 }
