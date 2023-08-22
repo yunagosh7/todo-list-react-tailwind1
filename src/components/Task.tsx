@@ -1,22 +1,29 @@
-import React, { FC, useState } from 'react'
+import React, {  useState } from 'react'
 import { TaskModel } from '../models/TaskModel'
-import { Dialog, DialogContent, DialogContentText, TextField, DialogActions, Button, DialogTitle, Card, CardContent, Typography } from '@mui/material'
+import { Dialog, DialogContent, DialogContentText, TextField, DialogActions, Button, DialogTitle } from '@mui/material'
+import { useTaskContext } from '../context/TodoContext'
 
 // Define the props of the functional component
-interface TaskProps {
+type TaskProps = {
   task: TaskModel
 }
 
 
-const Task: FC<TaskProps> = ({task}): JSX.Element | null => {
+const Task = ({task}: TaskProps) => {
   const [open, setOpen] = useState(false)
-  if(!task) {
-    return null
-  }
+  const [taskTitle, setTaskTitle] = useState(task.title)
+  const [taskDesc, setTaskDesc] = useState(task.desc)
+
+  const todoContext = useTaskContext()
+
+  const updateTask = todoContext.updateTask;
 
 
   const handleUpdate = () => {
     setOpen(false)
+
+    
+    updateTask(task.id, taskTitle, taskDesc)
   }
 
   const handleClick = () => {
@@ -25,7 +32,7 @@ const Task: FC<TaskProps> = ({task}): JSX.Element | null => {
 
   return (
     <>
-    <div className={`w-full md:w-2/4 lg:w-1/3 bg-slate-700  rounded-sm ${task.completed ? "bg-green-800" : "bg-red-900"}`}>
+    <div className={`w-full  bg-slate-700  rounded-sm ${task.completed ? "bg-green-800" : "bg-red-900"}`}>
       <h3 className='text-lg text-white font-bold text-center'>{task.title}</h3>
       <p className='text-white text-center'>{task.desc}</p>
       <p className='text-white text-center'>{task.completed ? "Completada" : "Sin hacer"}</p>
@@ -62,15 +69,24 @@ const Task: FC<TaskProps> = ({task}): JSX.Element | null => {
         type='text'
         fullWidth
         variant='standard'
+        value={taskTitle}
+        onChange={(e) => {
+          setTaskTitle(e.target.value)
+        }}
         />
         
         <TextField 
         margin='dense'
-        id='task-title'
+        id='task-desc'
         label='Task description'
         type='text'
         fullWidth
         variant='standard'
+        value={taskDesc}
+        onChange={(e) => {
+          setTaskDesc(e.target.value)
+          
+        }}
         />
       </DialogContent>
       <DialogActions>

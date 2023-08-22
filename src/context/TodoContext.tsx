@@ -1,25 +1,77 @@
-import { FC, ReactNode, createContext, useState } from 'react'
+import { FC, ReactNode, createContext, useContext, useState } from 'react'
 import { TaskModel } from '../models/TaskModel'
 
-const TodoContext = createContext<TaskModel | null>(null);
+interface TodoContextType {
+  tasks: TaskModel[];
+  addTask: (task: TaskModel) => void;
+  updateTask: (id: string, title: string, desc: string) => void;
+  completeTask: (id: string) => void;
+  deleteTask: (id: string) => void;
+}
 
-const TodoProvider: FC<ReactNode> = ({children}) => {
+const TodoContext = createContext<TodoContextType | null>(null);
+
+const TodoProvider: FC<{children: ReactNode}> = ({children}) => {
   const [tasks, setTasks] = useState<TaskModel[]>([
-    {
-      title: "First task",
-      desc: "Description of the first task",
-      completed: false
-    }
+   new TaskModel("0", "title of the task", "description of the task", false)
   ]);
 
+  const addTask = (task: TaskModel) => {
+    setTasks([...tasks, task])
+  }
+
+  const updateTask = (id: string, title: string, desc: string) => {
+    const updatedTasks = tasks.map(task => {
+      if (task.id === id) {
+        task.title = title;
+        task.desc = desc;
+      }
+      return task;
+    })
+    setTasks(updatedTasks)
+  }
+
+  const completeTask = (id: string) => {
+    const updatedTask = tasks.map(task => {
+      if(task.id === id) {
+        task.complete();
+      }
+      return task
+    })
+    setTasks(updatedTask)
+  }
+
+  const deleteTask = (id: string) => {
+    const updatedTasks = tasks.filter(task => task.id !== id)
+    setTasks(updatedTasks)
+  }
+
   return <TodoContext.Provider value={{
-    tasks
+    tasks,
+    addTask,
+    updateTask,
+    completeTask,
+    deleteTask
     }}>
 {children}
 </TodoContext.Provider>
 } 
 
+
+
+const useTaskContext = () => {
+  const context = useContext(TodoContext);
+  if(!context) {
+    throw new Error("useTodoContext debe ser utilizado dentro de un TodoProvider")
+  }
+  return context;
+}
 // export function TodoProvider(props) {
 //   const [tasks, setTasks] = useState<TaskModel[]>([])
 
 // }
+
+export {
+  TodoProvider,
+  useTaskContext
+}

@@ -1,9 +1,15 @@
 import React, { FormEvent, useRef, useState } from "react";
 import { TaskModel } from "../models/TaskModel";
+import { useTaskContext } from "../context/TodoContext";
 
 const Form = () => {
   const inputTaskTitleRef = useRef<HTMLInputElement>(null);
   const inputTaskDescRef = useRef<HTMLInputElement>(null);
+
+  const todoContext = useTaskContext()
+  
+  const addTask = todoContext.addTask;
+
 
   const isTitleCorrect = (): boolean => {
     return inputTaskTitleRef.current?.value.trim() != "";
@@ -19,7 +25,8 @@ const Form = () => {
 
     const title: string = inputTaskTitleRef.current?.value.toString()!!;
     const desc: string = inputTaskDescRef.current?.value.toString() ?? "";
-    const task: TaskModel = new TaskModel(title, desc, false);
+    const task: TaskModel = new TaskModel((Math.random() * 10000).toString(), title, desc, false);
+    addTask(task)
     console.log(task);
   };
 
@@ -28,7 +35,7 @@ const Form = () => {
       onSubmit={(e) => handleSubmit(e)}
       className="flex flex-col items-center mx-auto w-3/4 md:w-96"
     >
-      <div className="flex flex-col  w-full">
+      <div className="flex flex-col w-full">
         <label className="text-white text-lg py-2" htmlFor="task-title">
           Task title
         </label>
