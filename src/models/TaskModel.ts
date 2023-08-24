@@ -16,8 +16,8 @@ export class TaskModel {
         this.desc = desc;
     }
 
-    complete() {
-        this.completed = true;
+    changeStatus() {
+        this.completed = !this.completed;
     }
 
 }

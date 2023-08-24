@@ -6,27 +6,43 @@ const Form = () => {
   const inputTaskTitleRef = useRef<HTMLInputElement>(null);
   const inputTaskDescRef = useRef<HTMLInputElement>(null);
 
-  const todoContext = useTaskContext()
-  
+  const todoContext = useTaskContext();
+
   const addTask = todoContext.addTask;
 
-
-  const isTitleCorrect = (): boolean => {
-    return inputTaskTitleRef.current?.value.trim() != "";
+  const validateEmptyFields = (): boolean => {
+    if (
+      inputTaskDescRef.current?.value.trim() == "" ||
+      inputTaskTitleRef.current?.value.trim() == ""
+    )
+      return false;
+    else return true;
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!isTitleCorrect()) {
-        console.log("no anda");
-        
-      return;
-    } 
+    if (!validateEmptyFields()) {
+      console.log("no anda");
 
-    const title: string = inputTaskTitleRef.current?.value.toString()!!;
-    const desc: string = inputTaskDescRef.current?.value.toString() ?? "";
-    const task: TaskModel = new TaskModel((Math.random() * 10000).toString(), title, desc, false);
-    addTask(task)
+      return;
+    }
+
+    const clearFields = () => {
+      inputTaskDescRef.current.value! = "";
+      inputTaskTitleRef.current.value! = "";
+      
+    }
+
+    const title: string = inputTaskTitleRef.current.value.toString()!;
+    const desc: string = inputTaskDescRef.current.value.toString()!;
+    const task: TaskModel = new TaskModel(
+      (Math.random() * 10000).toString(),
+      title,
+      desc,
+      false
+    );
+    addTask(task);
+    clearFields();
     console.log(task);
   };
 

@@ -5,7 +5,7 @@ interface TodoContextType {
   tasks: TaskModel[];
   addTask: (task: TaskModel) => void;
   updateTask: (id: string, title: string, desc: string) => void;
-  completeTask: (id: string) => void;
+  changeTaskStatus: (id: string) => void;
   deleteTask: (id: string) => void;
 }
 
@@ -31,10 +31,10 @@ const TodoProvider: FC<{children: ReactNode}> = ({children}) => {
     setTasks(updatedTasks)
   }
 
-  const completeTask = (id: string) => {
+  const changeTaskStatus = (id: string) => {
     const updatedTask = tasks.map(task => {
       if(task.id === id) {
-        task.complete();
+        task.changeStatus();
       }
       return task
     })
@@ -50,7 +50,7 @@ const TodoProvider: FC<{children: ReactNode}> = ({children}) => {
     tasks,
     addTask,
     updateTask,
-    completeTask,
+    changeTaskStatus,
     deleteTask
     }}>
 {children}

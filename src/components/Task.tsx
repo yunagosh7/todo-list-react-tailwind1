@@ -17,11 +17,13 @@ const Task = ({task}: TaskProps) => {
   const todoContext = useTaskContext()
 
   const updateTask = todoContext.updateTask;
+  const changeTaskStatus = todoContext.changeTaskStatus;
+  const deleteTask = todoContext.deleteTask;
 
 
   const handleUpdate = () => {
     setOpen(false)
-
+    
     
     updateTask(task.id, taskTitle, taskDesc)
   }
@@ -30,13 +32,22 @@ const Task = ({task}: TaskProps) => {
     setOpen(true);
   }
 
+  const handleStatusBtnClick = () => {
+    changeTaskStatus(task.id)
+  }
+
+  const handleDeleteBtnClick = () => {
+    deleteTask(task.id)
+  }
+
   return (
     <>
     <div className={`w-full  bg-slate-700  rounded-sm ${task.completed ? "bg-green-800" : "bg-red-900"}`}>
       <h3 className='text-lg text-white font-bold text-center'>{task.title}</h3>
       <p className='text-white text-center'>{task.desc}</p>
-      <p className='text-white text-center'>{task.completed ? "Completada" : "Sin hacer"}</p>
+      <button onClick={handleStatusBtnClick} className={`w-full ${task.completed ? 'bg-green-500' : 'bg-yellow-500'} py-2 rounded-sm text-white`}>{task.completed ? "Completa" : "Incompleta"}</button>
       <button onClick={handleClick} className=' w-full bg-blue-900 py-2 rounded-sm text-white font-bold'>Update</button>
+      <button onClick={handleDeleteBtnClick} className='w-full bg-red-500 py-2 rounded-sm text-white'>Delete task</button>
     </div>
     {/* <Card sx={{minWidth:275, maxWidth: 350, margin:1}}>
       <CardContent>
